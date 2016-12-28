@@ -3,7 +3,7 @@
 "use strict";
 
 // scope syntax, not controller-as
-angular.module('restApp').controller('BasicWeaponController', function($scope, $window, basicGroupService, basicItemService, basicObjectTypeService, $q, $http) {
+angular.module('restApp').controller('BasicWeaponController', function($scope, $window, basicDiceService, basicGroupService, basicItemService, basicObjectTypeService, $q, $http) {
     $scope.newEntity = {
         count: 0,
         description: "",
@@ -23,6 +23,13 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
         types: [],
         weight: 0.0
     };
+    const MASTER_GROUP_LIST = [
+    	"BLUNT_WEAPON", "EDGED_WEAPON", "HEAVY_WEAPON", "LIGHT_WEAPON", "LONGBOW",
+    	"PIERCING_WEAPON", "PROJECTILE_WEAPON", "SILVER_WEAPON", "STAFF", "THROWN_WEAPON"
+    ];
+    const MASTER_OBJECT_LIST = [
+    	"OBJECT_TYPE_DAGGER", "OBJECT_TYPE_1H", "OBJECT_TYPE_2H", "OBJECT_TYPE_BOW"
+    ];
     var findEntity = function(entity, entities) {
         var found = '';
         for (var i = entities.length - 1; i >= 0; i--) {
@@ -38,47 +45,14 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
         }
         return found;
     };
-    var getAllGroupEntities = function() {
-        var promise = basicGroupService.getEntities();
+    var getAllDiceEntities = function() {
+        var promise = basicDiceService.getEntities();
         promise.then(function(response) {
-            console.log("GET::");
-            console.log(response);
             if (response.status === 200) {
-                $scope.group_entities = response.data;
-                for (var i = $scope.group_entities.length - 1; i >= 0; i--) {
-                    if (angular.isUndefined($scope.group_entities[i].id)) {
-                        $scope.group_entities[i].id = 0;
-                    }
-                    if ($scope.group_entities[i].name === "BARBARIAN"
-                            || $scope.group_entities[i].name === "SOLDIER"
-                            || $scope.group_entities[i].name === "THIEF"
-                            || $scope.group_entities[i].name === "WIZARD") {
-                        $scope.group_entities.splice(i, 1);
-                    }
-                }
-            }
-        });
-    };
-    var getAllObjectTypeEntities = function() {
-        var promise = basicObjectTypeService.getEntities();
-        promise.then(function(response) {
-            console.log("GET::");
-            console.log(response);
-            if (response.status === 200) {
-                $scope.oject_type_entities = response.data;
-                for (var i = $scope.oject_type_entities.length - 1; i >= 0; i--) {
-                    if (angular.isUndefined($scope.oject_type_entities[i].id)) {
-                        $scope.oject_type_entities[i].id = 0;
-                    }
-                    if ($scope.oject_type_entities[i].code === "OBJECT_TYPE_WEAPON"
-                            || $scope.oject_type_entities[i].code === "OBJECT_TYPE_SHIELD"
-                            || $scope.oject_type_entities[i].code === "OBJECT_TYPE_FOOD"
-                            || $scope.oject_type_entities[i].code === "OBJECT_TYPE_GOLD"
-                            || $scope.oject_type_entities[i].code === "OBJECT_TYPE_ARMOR"
-                            || $scope.oject_type_entities[i].code === "OBJECT_TYPE_HELMET"
-                            || $scope.oject_type_entities[i].code === "OBJECT_TYPE_RING"
-                            || $scope.oject_type_entities[i].code === "OBJECT_TYPE_LEGGINGS") {
-                        $scope.oject_type_entities.splice(i, 1);
+                $scope.dice_entities = response.data;
+                for (var i = $scope.dice_entities.length - 1; i >= 0; i--) {
+                    if (angular.isUndefined($scope.dice_entities[i].id)) {
+                        $scope.dice_entities[i].id = 0;
                     }
                 }
             }
@@ -87,8 +61,6 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
     var getAllEntities = function() {
         var promise = basicItemService.getEntities();
         promise.then(function(response) {
-            console.log("GET::");
-            console.log(response);
             if (response.status === 200) {
                 $scope.entities = response.data;
                 for (var i = $scope.entities.length - 1; i >= 0; i--) {
@@ -99,9 +71,39 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
             }
         });
     };
+    var getAllGroupEntities = function() {
+        var promise = basicGroupService.getEntities();
+        promise.then(function(response) {
+            if (response.status === 200) {
+                $scope.group_entities = response.data;
+                for (var i = $scope.group_entities.length - 1; i >= 0; i--) {
+                    if (angular.isUndefined($scope.group_entities[i].id)) {
+                        $scope.group_entities[i].id = 0;
+                    }
+                    if (!MASTER_GROUP_LIST.includes($scope.group_entities[i].name)) {
+                        $scope.group_entities.splice(i, 1);
+                    }
+                }
+            }
+        });
+    };
+    var getAllObjectTypeEntities = function() {
+        var promise = basicObjectTypeService.getEntities();
+        promise.then(function(response) {
+            if (response.status === 200) {
+                $scope.object_type_entities = response.data;
+                for (var i = $scope.object_type_entities.length - 1; i >= 0; i--) {
+                    if (angular.isUndefined($scope.object_type_entities[i].id)) {
+                        $scope.object_type_entities[i].id = 0;
+                    }
+                    if (!MASTER_OBJECT_LIST.includes($scope.object_type_entities[i].code)) {
+                        $scope.object_type_entities.splice(i, 1);
+                    }
+                }
+            }
+        });
+    };
     var postEntity = function() {
-        console.log("POST::");
-        console.log($scope.newEntity);
         var promise = basicItemService.insertEntity($scope.newEntity);
         promise.then(function(response) {
             if (response.status === 200) {
@@ -175,10 +177,10 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
                 if (msg.length > 0) {
                     $window.alert(msg);
                 } else {
-                    // postEntity();
+                    postEntity();
                 }
             } else {
-                // postEntity();
+                postEntity();
             }            
         }
     };
@@ -205,6 +207,7 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
         }
     };
     getAllEntities();
+    getAllDiceEntities();
     getAllGroupEntities();
     getAllObjectTypeEntities();
 });

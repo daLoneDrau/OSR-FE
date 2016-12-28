@@ -52,18 +52,30 @@ angular.module('restApp').run(function($templateCache) {
                         min="0" /> \
                 </div> \
             </div> \
-            <!-- Weapon Type --> \
-            <div class="form-group"> \
-                <label for="selType" class="control-label col-sm-4">Weapon Type</label> \
-                <div class="col-sm-8"> \
-                    <select class="form-control" name="selType" id="selType" \
-                            ng-model="newEntity.types" \
-                            ng-options="entity as entity.code | uppercase for entity in oject_type_entities | orderBy:\'flag\' track by entity.id" \
-                            required> \
-                        <option value="">---Please select---</option> <!-- not selected / blank option --> \
-                    </select> \
-                </div> \
-            </div> \
+	        <!-- Weapon Type --> \
+	        <div class="form-group"> \
+	            <label for="selType" class="control-label col-sm-4">Weapon Type</label> \
+	            <div class="col-sm-8"> \
+	                <select class="form-control" name="selType" id="selType" \
+	                        ng-model="newEntity.types" \
+	                        ng-options="entity as entity.code | uppercase for entity in object_type_entities | orderBy:\'flag\' track by entity.id" \
+	                        required> \
+	                    <option value="">---Please select---</option> <!-- not selected / blank option --> \
+	                </select> \
+	            </div> \
+	        </div> \
+	        <!-- Weapon Damage --> \
+	        <div class="form-group"> \
+	            <label for="selType" class="control-label col-sm-4">Damage</label> \
+	            <div class="col-sm-8"> \
+	                <select class="form-control" name="selDmg" id="selDmg" \
+	                        ng-model="newEntity.damages" \
+	                        ng-options="entity as entity.code | uppercase for entity in dice_entities | orderBy:[ \'die.code\', \'number\' ] track by entity.id" \
+	                        required> \
+	                    <option value="">---Please select---</option> <!-- not selected / blank option --> \
+	                </select> \
+	            </div> \
+	        </div> \
             <!-- Weapon Groups --> \
             <div class="form-group"> \
                 <label for="selGroups" class="control-label col-sm-4">Weapon Groups</label> \
