@@ -38,7 +38,7 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
         }
         return found;
     };
-    var getAllGroupEntities = function() {        
+    var getAllGroupEntities = function() {
         var promise = basicGroupService.getEntities();
         promise.then(function(response) {
             console.log("GET::");
@@ -59,7 +59,7 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
             }
         });
     };
-    var getAllObjectTypeEntities = function() {        
+    var getAllObjectTypeEntities = function() {
         var promise = basicObjectTypeService.getEntities();
         promise.then(function(response) {
             console.log("GET::");
@@ -84,7 +84,7 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
             }
         });
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = basicItemService.getEntities();
         promise.then(function(response) {
             console.log("GET::");

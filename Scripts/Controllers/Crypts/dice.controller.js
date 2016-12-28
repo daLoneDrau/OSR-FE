@@ -24,7 +24,7 @@ angular.module('restApp').controller('CryptDiceController', function($scope, $wi
         }
         return found;
     };
-    var getAllDieEntities = function() {        
+    var getAllDieEntities = function() {
         var promise = cryptDieService.getEntities();
         promise.then(function(response) {
             console.log("GET::");
@@ -39,7 +39,7 @@ angular.module('restApp').controller('CryptDiceController', function($scope, $wi
             }
         });
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = cryptDiceService.getEntities();
         promise.then(function(response) {
             console.log("GET::");

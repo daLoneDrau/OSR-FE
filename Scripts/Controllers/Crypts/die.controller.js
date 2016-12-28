@@ -43,7 +43,7 @@ angular.module('restApp').controller('CryptDieController', function($scope, $win
             putEntity();
         }
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = cryptDieService.getEntities();
         promise.then(function(response) {
             console.log("GET::");

@@ -43,7 +43,7 @@ angular.module('restApp').controller('BasicObjectTypeController', function($scop
             putEntity();
         }
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = basicObjectTypeService.getEntities();
         promise.then(function(response) {
             console.log("GET::");

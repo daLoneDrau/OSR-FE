@@ -40,7 +40,7 @@ angular.module('restApp').controller('CryptGroupController', function($scope, cr
             }
         }
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = cryptGroupService.getEntities();
         promise.then(function(response) {
             console.log("GET::");

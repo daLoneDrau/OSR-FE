@@ -22,7 +22,7 @@ angular.module('restApp').controller('CryptGenderController', function($scope, $
         }
         return found;
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = cryptGenderService.getEntities();
         promise.then(function(response) {
             console.log("GET::");

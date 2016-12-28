@@ -38,7 +38,7 @@ angular.module('restApp').controller('CryptWeaponController', function($scope, $
         }
         return found;
     };
-    var getAllGroupEntities = function() {        
+    var getAllGroupEntities = function() {
         var promise = cryptGroupService.getEntities();
         promise.then(function(response) {
             console.log("GET::");
@@ -59,7 +59,7 @@ angular.module('restApp').controller('CryptWeaponController', function($scope, $
             }
         });
     };
-    var getAllObjectTypeEntities = function() {        
+    var getAllObjectTypeEntities = function() {
         var promise = cryptObjectTypeService.getEntities();
         promise.then(function(response) {
             console.log("GET::");
@@ -84,7 +84,7 @@ angular.module('restApp').controller('CryptWeaponController', function($scope, $
             }
         });
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = cryptItemService.getEntities();
         promise.then(function(response) {
             console.log("GET::");

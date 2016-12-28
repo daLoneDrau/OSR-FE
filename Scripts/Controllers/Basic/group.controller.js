@@ -40,7 +40,7 @@ angular.module('restApp').controller('BasicGroupController', function($scope, ba
             }
         }
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = basicGroupService.getEntities();
         promise.then(function(response) {
             console.log("GET::");

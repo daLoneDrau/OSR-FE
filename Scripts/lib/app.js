@@ -33,6 +33,9 @@ angular.module('restApp').config(function($routeProvider) {
     }).when("/crypt_weapons", {
         controller: "CryptWeaponController",
         templateUrl: 'crypt_weapons'
+    }).when("/crypt_modifiers", {
+        controller: "CryptModifierController",
+        templateUrl: 'crypt_modifiers'
     }).when("/basic", {
         templateUrl: 'basic_main'
     }).when("/basic_groups", {

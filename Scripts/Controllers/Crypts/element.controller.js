@@ -57,7 +57,7 @@ angular.module('restApp').controller('CryptElementController', function($scope, 
             putEntity();
         }
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = cryptElementService.getEntities();
         promise.then(function(response) {
             console.log("GET::");

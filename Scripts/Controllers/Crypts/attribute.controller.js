@@ -68,7 +68,7 @@ angular.module('restApp').controller('CryptAttributeController', function($scope
         }
         return found;
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = cryptAttributeService.getEntities();
         promise.then(function(response) {
             console.log("GET::");
@@ -157,7 +157,7 @@ angular.module('restApp').controller('CryptAttributeController', function($scope
             }
         });
     };
-    var getElementEntity = function(code) {        
+    var getElementEntity = function(code) {
         var promise = cryptElementService.getByCode(code);
         promise.then(function(response) {
             console.log("GET::");

@@ -22,7 +22,7 @@ angular.module('restApp').controller('BasicGenderController', function($scope, $
         }
         return found;
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = basicGenderService.getEntities();
         promise.then(function(response) {
             console.log("GET::");

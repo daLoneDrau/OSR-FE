@@ -43,7 +43,7 @@ angular.module('restApp').controller('CryptObjectTypeController', function($scop
             putEntity();
         }
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = cryptObjectTypeService.getEntities();
         promise.then(function(response) {
             console.log("GET::");

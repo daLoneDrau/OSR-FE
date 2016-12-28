@@ -43,7 +43,7 @@ angular.module('restApp').controller('BasicDieController', function($scope, $win
             putEntity();
         }
     };
-    var getAllEntities = function() {        
+    var getAllEntities = function() {
         var promise = basicDieService.getEntities();
         promise.then(function(response) {
             console.log("GET::");
