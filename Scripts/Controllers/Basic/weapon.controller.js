@@ -3,14 +3,16 @@
 "use strict";
 
 // scope syntax, not controller-as
-angular.module('restApp').controller('BasicWeaponController', function($scope, $window, basicDiceService, basicGroupService, basicItemService, basicObjectTypeService, $q, $http) {
+angular.module('restApp').controller('BasicWeaponController', function($scope, $window,
+		basicDiceService, basicGroupService, basicItemService, basicObjectTypeService, $q, $http) {
     $scope.newEntity = {
         count: 0,
+        damages: {},
         description: "",
         food_value: 0,
         groups: [],
         internal_script: "",
-        item_name: "",
+        name: "",
         left_ring: false,
         light_value: 0,
         max_owned: 0,
@@ -31,16 +33,35 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
     	"OBJECT_TYPE_DAGGER", "OBJECT_TYPE_1H", "OBJECT_TYPE_2H", "OBJECT_TYPE_BOW"
     ];
     var findEntity = function(entity, entities) {
+    	var t = 0;
         var found = '';
         for (var i = entities.length - 1; i >= 0; i--) {
-            if (entities[i].code === entity.code) {
-                found = "A dice roll with that code already exists";
-                break;
-            }
-            if (entities[i].number === entity.number
-                    && entities[i].die.code === entity.die.code) {
-                found = "A dice roll with that number already exists";
-                break;
+            if (entities[i].name === entity.name
+            		&& entities[i].internal_script === entity.internal_script
+            		&& entities[i].description === entity.description
+            		&& entities[i].price === entity.price
+            		&& entities[i].weight === entity.weight
+            		&& entities[i].damages === entity.damages
+            		&& entities[i].types.length === entity.types.length
+            		&& entities[i].groups.length === entity.groups.length) {
+            	var same = false;
+            	for (var j = entities[i].types.length - 1; i >= 0; i--) {
+            		if (entities[i].types[j] === entity.types[j]) {
+            			same = true;
+            			break;
+            		}
+            	}
+            	if (!same) {
+	            	for (var j = entities[i].groups.length - 1; i >= 0; i--) {
+	            		if (entities[i].groups[j] === entity.groups[j]) {
+	            			same = true;
+	            			break;
+	            		}
+	            	}
+            	}
+            	if (same) {
+                    found = "A weapon with the same data already exists";
+            	}
             }
         }
         return found;
@@ -64,8 +85,14 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
             if (response.status === 200) {
                 $scope.entities = response.data;
                 for (var i = $scope.entities.length - 1; i >= 0; i--) {
-                    if (angular.isUndefined($scope.entities[i].id)) {
-                        $scope.entities[i].id = 0;
+                	var entity = $scope.entities[i];
+                	entity.types = entity.types[0];
+                    if (angular.isUndefined(entity.id)) {
+                    	entity.id = 0;
+                    }
+                    var isWeapon = false;
+                    if (!MASTER_OBJECT_LIST.includes(entity.types.code)) {
+                        $scope.entities.splice(i, 1);
                     }
                 }
             }
@@ -171,7 +198,6 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
         if (msg.length > 0) {
             $window.alert(msg);
         } else {
-            console.log($scope.newEntity);
             if ($scope.entities.length > 0) {
                 msg = findEntity($scope.newEntity, $scope.entities);
                 if (msg.length > 0) {
@@ -185,19 +211,40 @@ angular.module('restApp').controller('BasicWeaponController', function($scope, $
         }
     };
     $scope.update = function() {
+        $scope.entitySelect.types = [ $scope.entitySelect.types ];
         var msg = '';
         for (var i = $scope.entities.length - 1; i >= 0; i--) {
             if ($scope.entities[i].id === $scope.entitySelect.id) {
                 continue;
             }
-            if ($scope.entities[i].code === $scope.entitySelect.code) {
-                msg = "A dice roll with that code already exists";
-                break;
-            }
-            if ($scope.entities[i].number === $scope.entitySelect.number
-                    && $scope.entities[i].die.code === $scope.entitySelect.die.code) {
-                msg = "A dice roll with that number already exists";
-                break;
+            for (var i = $scope.entities.length - 1; i >= 0; i--) {
+                if ($scope.entities[i].name === $scope.entitySelect.name
+                		&& $scope.entities[i].internal_script === $scope.entitySelect.internal_script
+                		&& $scope.entities[i].description === $scope.entitySelect.description
+                		&& $scope.entities[i].price === $scope.entitySelect.price
+                		&& $scope.entities[i].weight === $scope.entitySelect.weight
+                		&& $scope.entities[i].damages === $scope.entitySelect.damages
+                		&& $scope.entities[i].types.length === $scope.entitySelect.types.length
+                		&& $scope.entities[i].groups.length === $scope.entitySelect.groups.length) {
+                	var same = false;
+                	for (var j = $scope.entities[i].types.length - 1; i >= 0; i--) {
+                		if ($scope.entities[i].types[j] === $scope.entitySelect.types[j]) {
+                			same = true;
+                			break;
+                		}
+                	}
+                	if (!same) {
+    	            	for (var j = $scope.entities[i].groups.length - 1; i >= 0; i--) {
+    	            		if ($scope.entities[i].groups[j] === $scope.entitySelect.groups[j]) {
+    	            			same = true;
+    	            			break;
+    	            		}
+    	            	}
+                	}
+                	if (same) {
+                        msg = "A weapon with the same data already exists";
+                	}
+                }
             }
         }
         if (msg.length > 0) {

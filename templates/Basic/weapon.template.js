@@ -12,15 +12,24 @@ angular.module('restApp').run(function($templateCache) {
     <div class="col-sm-10 col-sm-offset-1"> \
         <!-- this form should send a POST request to rest service. --> \
         <form name="createForm" class="form-horizontal" ng-submit="create()" novalidate> \
-            <!-- Weapon Name --> \
-            <div class="form-group"> \
-                <label for="txtName" class="control-label col-sm-4">Name</label> \
-                <div class="col-sm-8"> \
-                    <input class="form-control" id="txtName" name="txtName" type="text" placeholder="e. g. Staff" \
-                            ng-model="newEntity.item_name"  \
-                            required /> \
-                </div> \
-            </div> \
+	        <!-- Weapon Name --> \
+	        <div class="form-group"> \
+	            <label for="txtName" class="control-label col-sm-4">Name</label> \
+	            <div class="col-sm-8"> \
+	                <input class="form-control" id="txtName" name="txtName" type="text" placeholder="e. g. Battle Axe" \
+	                        ng-model="newEntity.name"  \
+	                        required /> \
+	            </div> \
+	        </div> \
+	        <!-- Weapon Internal Script --> \
+	        <div class="form-group"> \
+	            <label for="txtScript" class="control-label col-sm-4">Script</label> \
+	            <div class="col-sm-8"> \
+	                <input class="form-control" id="txtScript" name="txtScript" type="text" placeholder="e. g. BattleAxe" \
+	                        ng-model="newEntity.internal_script"  \
+	                        required /> \
+	            </div> \
+	        </div> \
             <!-- Weapon Description --> \
             <div class="form-group"> \
                 <label for="txtDesc" class="control-label col-sm-4">Description</label> \
@@ -66,7 +75,7 @@ angular.module('restApp').run(function($templateCache) {
 	        </div> \
 	        <!-- Weapon Damage --> \
 	        <div class="form-group"> \
-	            <label for="selType" class="control-label col-sm-4">Damage</label> \
+	            <label for="selDmg" class="control-label col-sm-4">Damage</label> \
 	            <div class="col-sm-8"> \
 	                <select class="form-control" name="selDmg" id="selDmg" \
 	                        ng-model="newEntity.damages" \
@@ -104,7 +113,8 @@ angular.module('restApp').run(function($templateCache) {
         <hr> \
     </div> \
     <div class="col-sm-12"> \
-        <span class="text-muted">Current Elements: </span><span ng-repeat="entity in entities | orderBy:\'value\'"><span ng-show="!$first">, </span>{{entity.code | uppercase}}</span> \
+        <span class="text-muted">Current Weapons: </span> \
+    	<span ng-repeat="entity in entities | orderBy:\'name\'"><span ng-show="!$first">, </span>{{entity.name | uppercase}}</span> \
     </div> \
     <!-- -------------------- --> \
     <!-- Update Entities Form --> \
@@ -113,33 +123,100 @@ angular.module('restApp').run(function($templateCache) {
         <hr> \
     </div> \
     <div class="col-sm-12"> \
-        <p class="text-muted">Update Element</p> \
-        <form name="updateForm" class="form-inline" ng-submit="update()" novalidate> \
+        <p class="text-muted">Update Weapon</p> \
+        <form name="updateForm" class="form-horizontal" ng-submit="update()" novalidate> \
             <div class="form-group"> <!-- Select Entity --> \
-                <label for="selEntity" class="control-label">Choose:</label> \
-                <select class="form-control" name="selEntity" id="selEntity" ng-model="entitySelect" ng-options="entity as entity.code | uppercase for entity in entities | orderBy:\'value\' track by entity.id"> \
-                    <option value="">---Please select---</option> <!-- not selected / blank option --> \
-                </select> \
-            </div> \
-            <!-- Update Code -->  \
-            <div class="form-group"> <!-- Update Code --> \
-                <label for="updCode" class="control-label">Code</label> \
-                <input ng-model="entitySelect.code" type="text" class="form-control" id="updCode" name="updCode"> \
-            </div> \
-            <!-- Update Value -->  \
-            <div \
-                class="form-group" \
-                name="divValue" \
-                ng-class="{ \'has-success\': updateForm.updValue.$valid && !updateForm.updValue.$pristine, \'has-error\': updateForm.updValue.$invalid && !updateForm.updValue.$pristine }" > \
-                <label for="updValue" class="control-label">Value</label> \
-                <input \
-                    ng-model="entitySelect.value" \
-                    ng-minlength="1"\
-                    ng-maxlength="3" \
-                    min="0" \
-                    ng-pattern="/^[0-9]{1,3}$/" \
-                    type="number" class="form-control" id="updValue" name="updValue" /> \
-            </div> \
+                <label for="selEntity" class="control-label col-sm-4">Choose:</label> \
+				<div class="col-sm-8"> \
+                	<select class="form-control" name="selEntity" id="selEntity" ng-model="entitySelect" ng-options="entity as entity.name | uppercase for entity in entities | orderBy:\'types[0].flag\' track by entity.id"> \
+                    	<option value="">---Please select---</option> <!-- not selected / blank option --> \
+                	</select> \
+        		</div> \
+        	</div> \
+	        <!-- Update Name -->  \
+	        <div class="form-group"> \
+	            <label for="updName" class="control-label col-sm-4">Name</label> \
+				<div class="col-sm-8"> \
+	            	<input ng-model="entitySelect.name" type="text" class="form-control" id="updName" name="updName"> \
+				</div> \
+	        </div> \
+	        <!-- Weapon Internal Script --> \
+	        <div class="form-group"> \
+	            <label for="updScript" class="control-label col-sm-4">Script</label> \
+	            <div class="col-sm-8"> \
+	                <input class="form-control" id="updScript" name="updScript" type="text" \
+	                        ng-model="entitySelect.internal_script"  \
+	                        required /> \
+	            </div> \
+	        </div> \
+	        <!-- Update Description -->  \
+	        <div class="form-group"> \
+	            <label for="updDesc" class="control-label col-sm-4">Description</label> \
+				<div class="col-sm-8"> \
+    				<textarea ng-model="entitySelect.description" cols="40" rows="5" class="form-control" id="updDesc" name="updDesc" required ></textarea> \
+				</div> \
+	        </div> \
+	        <!-- Update Price -->  \
+	        <div class="form-group" name="divUpdPrice" \
+	                ng-class="{ \'has-success\': updateForm.updPrice.$valid && !updateForm.updPrice.$pristine, \'has-error\': updateForm.updPrice.$invalid && !updateForm.updPrice.$pristine }" > \
+	            <label for="updPrice" class="control-label col-sm-4">Price</label> \
+	            <div class="col-sm-8"> \
+	                <input class="form-control" id="updPrice" name="updPrice" type="number" step="0.1"\
+	                    ng-model="entitySelect.price" \
+	                    ng-minlength="1"\
+	                    ng-maxlength="5" \
+	                    min="0" /> \
+	            </div> \
+	        </div> \
+	        <!-- Update Weight -->  \
+	        <div class="form-group" name="divUpdWeight" \
+	                ng-class="{ \'has-success\': updateForm.updWeight.$valid && !updateForm.updWeight.$pristine, \'has-error\': updateForm.updWeight.$invalid && !updateForm.updWeight.$pristine }" > \
+	            <label for="updWeight" class="control-label col-sm-4">Weight</label> \
+	            <div class="col-sm-8"> \
+	                <input class="form-control" id="updWeight" name="updWeight" type="number" step="0.5"\
+	                    ng-model="entitySelect.weight" \
+	                    ng-minlength="1"\
+	                    ng-maxlength="5" \
+	                    min="0" /> \
+	            </div> \
+	        </div> \
+	        <!-- Update Type --> \
+	        <div class="form-group"> \
+	            <label for="updType" class="control-label col-sm-4">Type</label> \
+	            <div class="col-sm-8"> \
+	                <select class="form-control" name="updType" id="updType" \
+	                        ng-model="entitySelect.types" \
+	                        ng-options="entity as entity.code | uppercase for entity in object_type_entities | orderBy:\'flag\' track by entity.id" \
+	                        required> \
+	                    <option value="">---Please select---</option> <!-- not selected / blank option --> \
+	                </select> \
+	            </div> \
+	        </div> \
+	        <!-- Update Damage --> \
+	        <div class="form-group"> \
+	            <label for="updDmg" class="control-label col-sm-4">Damage</label> \
+	            <div class="col-sm-8"> \
+	                <select class="form-control" name="updDmg" id="updDmg" \
+	                        ng-model="entitySelect.damages" \
+	                        ng-options="entity as entity.code | uppercase for entity in dice_entities | orderBy:[ \'die.code\', \'number\' ] track by entity.id" \
+	                        required> \
+	                    <option value="">---Please select---</option> <!-- not selected / blank option --> \
+	                </select> \
+	            </div> \
+	        </div> \
+	        <!-- Update Groups --> \
+	        <div class="form-group"> \
+	            <label for="updGroups" class="control-label col-sm-4">Groups</label> \
+	            <div class="col-sm-8"> \
+	                <select class="form-control" name="updGroups" id="updGroups" \
+	                        ng-model="entitySelect.groups" \
+	                        ng-options="entity as entity.name | uppercase for entity in group_entities | orderBy:\'name\' track by entity.id" \
+	                        multiple \
+	                        required> \
+	                    <option value="">---Please select---</option> <!-- not selected / blank option --> \
+	                </select> \
+	            </div> \
+	        </div> \
             <!-- Submit Button --> \
             <div class="form-group"> \
                 <button type="submit" class="btn btn-primary" ng-disabled="!updateForm.$valid">Update</button> \
